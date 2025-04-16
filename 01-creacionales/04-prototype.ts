@@ -9,3 +9,37 @@
  * 
  * https://refactoring.guru/es/design-patterns/prototype
  */
+
+class Document{
+  public title: string;
+  public author: string;
+  private content: string;
+
+  constructor(title: string, author: string, content: string){
+    this.title = title;
+    this.author = author;
+    this.content = content;
+  }
+
+  public displayInformation(){
+    console.log(`Title: ${this.title}`);
+    console.log(`Author: ${this.author}`);
+    console.log(`Content: ${this.content}`);
+  }
+
+  public clone(): Document{
+    return new Document(this.title, this.author, this.content);
+  }
+}
+
+function main(){
+  const document1 = new Document(
+    "Document 1", "John Doe", "This is the content of the document"
+  );
+  const document2 = document1.clone();
+
+  document1.displayInformation();
+  document2.displayInformation();
+}
+
+main();
