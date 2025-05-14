@@ -45,18 +45,30 @@ class MercadoPagoService {
 // 3. Clases Adaptadoras
 
 // Adaptador para PayPal
-class PayPalAdapter {
+class PayPalAdapter implements PaymentProcessor {
+  private payPalService: PayPalService = new PayPalService();
   // TODO: Implementar la interfaz PaymentProcessor
+  processPayment(amount: number): void {
+    this.payPalService.sendPayment(amount);
+  }
 }
 
 // Adaptador para Stripe
-class StripeAdapter {
+class StripeAdapter implements PaymentProcessor {
+  private stripeService: StripeService = new StripeService();
   // TODO: Implementar la interfaz PaymentProcessor
+  processPayment(amount: number): void {
+    this.stripeService.makeCharge(amount);
+  }
 }
 
 // Adaptador para MercadoPago
-class MercadoPagoAdapter {
+class MercadoPagoAdapter implements PaymentProcessor {
+  private mercadoPagoService: MercadoPagoService = new MercadoPagoService();
   // TODO: Implementar la interfaz PaymentProcessor
+  processPayment(amount: number): void {
+    this.mercadoPagoService.pay(amount);
+  }
 }
 
 // 4. Código Cliente para probar el Adapter
