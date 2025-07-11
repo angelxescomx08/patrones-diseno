@@ -9,3 +9,72 @@
  *
  * https://refactoring.guru/es/design-patterns/chain-of-responsibility
  */
+
+import { COLORS } from "../helpers/colors.ts";
+
+
+interface Handler{
+  setNext(handler: Handler):Handler;
+  handle(request: string):void;
+}
+
+abstract class BaseHandler implements Handler{
+  private nextHandler?: Handler;
+
+  setNext(handler: Handler):Handler{
+    this.nextHandler = handler;
+    return handler;
+  }
+
+  handle(request: string): void {
+    if(this.nextHandler){
+      this.nextHandler.handle(request);
+    }
+  }
+}
+
+class BasicSupport extends BaseHandler{
+  override handle(request: string): void {
+    if(request === "básico"){
+      console.log("%cResolviendo problema básico",COLORS.green)
+      return;
+    }
+    super.handle(request);
+  }
+}
+
+class AdvancedSupport extends BaseHandler{
+  override handle(request: string): void {
+    if(request === "avanzado"){
+      console.log("%cResolviendo problema avanzado",COLORS.yellow)
+      return;
+    }
+    super.handle(request);
+  }
+}
+
+class ExpertSupport extends BaseHandler{
+  override handle(request: string): void {
+    if(request === "experto"){
+      console.log("%cResolviendo problema experto",COLORS.red)
+      return;
+    }
+    console.log("No hay nada que hacer");
+  }
+}
+
+function main(){
+  const basicSupport = new BasicSupport();
+  const advancedSupport = new AdvancedSupport();
+  const exportSupport = new ExpertSupport();
+
+  basicSupport.setNext(advancedSupport).setNext(exportSupport);
+
+  basicSupport.handle("básico");
+  basicSupport.handle("avanzado");
+  basicSupport.handle("experto");
+  basicSupport.handle("muy difícil");
+
+}
+
+main();
