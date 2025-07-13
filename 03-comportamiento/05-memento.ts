@@ -8,3 +8,75 @@
  *
  * https://refactoring.guru/es/design-patterns/memento
  */
+
+class GameMemento{
+  constructor(private level: number, private health: number, private position: string){ }
+
+  getLevel(){
+    return this.level;
+  }
+
+  getHealth(){
+    return this.health;
+  }
+
+  getPosition(){
+    return this.position;
+  }
+}
+
+class Game{
+  private level: number = 1;
+  private health: number = 100;
+  private position: string = "inicio";
+  constructor(){ 
+    console.log(`Jugando en nivel ${this.level}
+        salud: ${this.health}
+        position: ${this.position}
+      `)
+  }
+
+  save(): GameMemento{
+    return new GameMemento(this.level, this.health, this.position);
+  }
+
+  play(level: number, health: number, position: string){
+    this.level = level;
+    this.health = health;
+    this.position = position;
+    console.log(`Jugando en nivel ${this.level}
+      salud: ${this.health}
+      position: ${this.position}
+    `)
+  }
+
+  restore(memento: GameMemento){
+    this.level = memento.getLevel();
+    this.health = memento.getHealth();
+    this.position = memento.getPosition();
+  }
+}
+
+class GameHistory{
+  private mementos: GameMemento[] = [];
+
+  push(memento: GameMemento){
+    this.mementos.push(memento);
+  }
+
+  pop(): GameMemento | undefined{
+    return this.mementos.pop()
+  }
+}
+
+function main(){
+  const game = new Game();
+  const history = new GameHistory();
+
+  history.push(game.save());
+
+  game.play(2,90,"bosque");
+  history.push(game.save());
+}
+
+main()
